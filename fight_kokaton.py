@@ -163,6 +163,38 @@ class Score:
         self.img = self.font.render(str(self.score), 0, self.color)
         screen.blit(self.img, self.rct)
 
+class Explosion:
+    """
+    爆発エフェクトに関するクラス（未使用）
+    """
+    def __init__(self, bomb: Bomb):
+        """
+        引数に基づき爆発エフェクトを生成する
+        """
+        self.img_lst = [pg.image.load("fig/explosion.gif"), pg.transform.rotozoom(pg.image.load("fig/explosion.gif"), 180, 0.7)]
+        self.img = self.img_lst[0]  # 初期表示は1枚目の画像
+        self.rct1 = self.img.get_rect()
+        self.rct1.center = (bomb.rct.centerx, bomb.rct.centery)
+        self.rct2 = self.img.get_rect()
+        self.rct2.center = (bomb.rct.centerx, bomb.rct.centery)
+        self.rct = self.rct1  # 初期表示はrct1
+        self.life = 30
+
+    def update(self, screen: pg.Surface):
+        """
+        爆発エフェクトを画面に表示する
+        引数 screen：画面Surface
+        """
+        self.life -= 1
+        if self.life > 0:
+            if self.life % 20 == 0:
+                self.img = self.img_lst[1]
+                self.rct = self.rct2
+            elif self.life % 20 <= 10:
+                self.img = self.img_lst[0]
+                self.rct = self.rct1
+        screen.blit(self.img, self.rct)
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -177,6 +209,7 @@ def main():
     fonto = pg.font.Font(None, 80)
     txt = fonto.render("Game Over", True, (255, 0, 0))
     score = Score()
+    explosions = []
 
     while True:
         for event in pg.event.get():
@@ -201,6 +234,8 @@ def main():
             for j,one_beam in enumerate(beams):
                 if one_beam is not None:
                     if one_beam.rct.colliderect(bomb.rct):
+                        exp = Explosion(bomb)
+                        explosions.append(exp)
                         bombs[i] = None
                         beams[j] = None
                         score.score += 1
@@ -208,6 +243,7 @@ def main():
 
         bombs = [bomb for bomb in bombs if bomb is not None]  # 爆弾リストからNoneを除去
         beams = [one_beam for one_beam in beams if one_beam is not None]
+        explosions = [exp for exp in explosions if exp.life > 0]
         for i, one_beam in enumerate(beams):
             if one_beam is not None:
                 yoko, tate = check_bound(one_beam.rct)
@@ -221,6 +257,8 @@ def main():
                 one_beam.update(screen)   
         for bomb in bombs:
             bomb.update(screen)
+        for exp in explosions:
+            exp.update(screen)
         score.update(screen)
         pg.display.update()
         tmr += 1
