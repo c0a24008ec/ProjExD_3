@@ -149,6 +149,8 @@ def main():
     beam = None  # ゲーム初期化時にはビームは存在しない
     clock = pg.time.Clock()
     tmr = 0
+    fonto = pg.font.Font(None, 80)
+    txt = fonto.render("Game Over", True, (255, 0, 0))
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -162,6 +164,7 @@ def main():
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
+                screen.blit(txt, [WIDTH//2-150, HEIGHT//2])
                 pg.display.update()
                 time.sleep(1)
                 return
