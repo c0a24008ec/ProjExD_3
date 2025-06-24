@@ -175,11 +175,8 @@ class Explosion:
         """
         self.img_lst = [pg.image.load("fig/explosion.gif"), pg.transform.rotozoom(pg.image.load("fig/explosion.gif"), 180, 0.7)]
         self.img = self.img_lst[0]  # 初期表示は1枚目の画像
-        self.rct1 = self.img.get_rect()
-        self.rct1.center = (bomb.rct.centerx, bomb.rct.centery)
-        self.rct2 = self.img.get_rect()
-        self.rct2.center = (bomb.rct.centerx, bomb.rct.centery)
-        self.rct = self.rct1  # 初期表示はrct1
+        self.rct = self.img.get_rect()
+        self.rct.center = (bomb.rct.centerx, bomb.rct.centery)
         self.life = 30
 
     def update(self, screen: pg.Surface):
@@ -191,10 +188,8 @@ class Explosion:
         if self.life > 0:
             if self.life % 20 == 0:
                 self.img = self.img_lst[1]
-                self.rct = self.rct2
             elif self.life % 20 <= 10:
                 self.img = self.img_lst[0]
-                self.rct = self.rct1
         screen.blit(self.img, self.rct)
 
 def main():
