@@ -92,7 +92,7 @@ class Beam:
     def __init__(self, bird:"Bird"):
         """
         ビーム画像Surfaceを生成する
-        引数 bird：ビームを放つこうかとん（Birdインスタンス）
+        引数 bird：こうかとん（Birdインスタンス）
         """
         self.vx = bird.dire[0]  # ビームの速度ベクトルはこうかとんの方向に合わせる
         self.vy = bird.dire[1]
@@ -106,7 +106,7 @@ class Beam:
     def update(self, screen: pg.Surface):
         """
         ビームを速度ベクトルself.vx, self.vyに基づき移動させる
-        引数 screen：画面Surfa ce
+        引数 screen：画面Surface
         """
         if check_bound(self.rct) == (True, True):
             self.rct.move_ip(self.vx, self.vy)
@@ -144,7 +144,7 @@ class Bomb:
 
 class Score:
     """
-    スコアに関するクラス（未使用）
+    スコアに関するクラス
     """
     def __init__(self):
         """
@@ -167,7 +167,7 @@ class Score:
 
 class Explosion:
     """
-    爆発エフェクトに関するクラス（未使用）
+    爆発エフェクトに関するクラス
     """
     def __init__(self, bomb: Bomb):
         """
